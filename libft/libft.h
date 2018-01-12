@@ -6,7 +6,7 @@
 /*   By: manki <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 08:26:36 by manki             #+#    #+#             */
-/*   Updated: 2017/12/28 10:39:35 by manki            ###   ########.fr       */
+/*   Updated: 2018/01/04 13:35:43 by manki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ void			ft_putnbr_base(int nbr, char *base);
 int				ft_sqrt(int nb);
 int				ft_abs(int nb);
 int				ft_isprime(unsigned int nb);
+void			*ft_realloc(void *ptr, size_t size);
 
 #endif

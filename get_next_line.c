@@ -6,74 +6,59 @@
 /*   By: manki <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/28 11:19:49 by manki             #+#    #+#             */
-/*   Updated: 2017/12/30 15:23:02 by manki            ###   ########.fr       */
+/*   Updated: 2018/01/12 14:48:44 by manki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include "get_next_line.h"
 
-void	*ft_realloc(void *ptr, size_t size)
-{
-	void	*tmp;
-	int		i;
+#include <stdio.h>
 
-	if (size < 1 && ptr)
-		ft_memdel(&ptr);
-	else
+int		ft_fill_line(char **line, t_gnl *f)
+{
+	while (f->i < f->r)
 	{
-		tmp = ptr;
-		if (!(ptr = ft_memalloc(size + 1)))
-			return (NULL);
-		if (tmp)
+		f->len += 1;
+		if (!(*line = ft_realloc(*line, f->len + 1)))
+			return (-1);
+		if (f->buf[f->i] == '\n')
 		{
-			i = -1;
-			while (*(char *)(tmp + (++i)))
-				*(char *)(ptr + i) = *(char *)(tmp + i);
-			ft_memdel((void **)&tmp);
+			f->i++;
+			f->len = 0;
+			return (1);
 		}
+		line[0][f->len - 1] = f->buf[f->i];
+		line[0][f->len] = '\0';
+		f->i++;
 	}
-	return (ptr);
-}
-
-char	*ft_char_cat(char *s1, char c)
-{
-	int		i;
-
-	i = 0;
-	while (s1[i])
-		i++;
-	s1[i] = c;
-	return (s1);
+	if (f->i == 0 && f->r == 0)
+		return (0);
+	return (2);
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	static int	r;
-	static char	tmp[BUFF_SIZE];
-	int			i;
-	static int	len;
+	static t_gnl	f;
+	int				result;
 
-	if (r > 0)
+	if ((line == NULL) || (fd < 0))
+		return (-1);
+	*line = ft_strnew(0);
+	result = 3;
+	if ((f.i < f.r) && ((result = ft_fill_line(line, &f)) != 2))
+		return (result);
+	while (result == 3 || result == 2)
 	{
-	}
-	while ((r = read(fd, tmp, BUFF_SIZE)) > 0)
-	{
-		i = -1;
-		while (tmp[++i] != '\n' && tmp[i])
-		{
-			len += 1;
-			if (!(*line = ft_realloc(*line, len)))
-				return (-1);
-			*line = ft_char_cat(*line, tmp[i]);
-			r--;
-		}
-		if (tmp[i] == '\n')
+		f.i = 0;
+		if ((f.r = read(fd, f.buf, BUFF_SIZE)) == -1)
+			return (-1);
+		if (f.r == 0 && result == 2)
 			return (1);
+		result = ft_fill_line(line, &f);
+		if (result != 2)
+			return (result);
 	}
-	if (r == 0)
-		return (0);
-	return (1);
+	return (-1);
 }

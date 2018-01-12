@@ -1,25 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: manki <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/13 15:50:20 by manki             #+#    #+#             */
-/*   Updated: 2018/01/12 13:11:27 by manki            ###   ########.fr       */
+/*   Created: 2018/01/04 13:31:46 by manki             #+#    #+#             */
+/*   Updated: 2018/01/12 13:22:28 by manki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
-void	ft_putstr(char const *s)
+void	*ft_realloc(void *ptr, size_t size)
 {
-	int		i;
+	void	*tmp;
 
-	if (s)
+	if (size == 0  && ptr)
 	{
-		i = -1;
-		while (s[++i])
-			ft_putchar(s[i]);
+		ft_memdel(&ptr);
+		if (!(ptr = ft_memalloc(1)))
+			return (NULL);
 	}
+	else if (size > 0)
+	{
+		tmp = ptr;
+		if (!(ptr = ft_memalloc(size)))
+			return (NULL);
+		if (tmp)
+		{
+			ft_strncpy(ptr, tmp, size);
+			ft_memdel(&tmp);
+		}
+	}
+	return (ptr);
 }

@@ -6,7 +6,7 @@
 #    By: manki <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/11 08:28:02 by manki             #+#    #+#              #
-#    Updated: 2017/12/28 10:39:07 by manki            ###   ########.fr        #
+#    Updated: 2018/01/12 12:47:57 by manki            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,20 +32,19 @@ SRCS += ft_memalloc.c ft_memdel.c ft_strnew.c ft_strdel.c ft_strclr.c \
 SRCS += ft_lstnew.c ft_lstdelone.c ft_lstdel.c ft_lstadd.c ft_lstiter.c \
 		ft_lstmap.c
 
-SRCS += ft_lstlen.c ft_list_push_front.c ft_list_push_back.c
-
-SRCS += ft_strrev.c ft_sort_integer_table.c ft_sort_wordtab.c \
+SRCS += ft_lstlen.c ft_list_push_front.c ft_list_push_back.c \
+		ft_strrev.c ft_sort_integer_table.c ft_sort_wordtab.c \
 		ft_print_words_tables.c ft_isblank.c ft_iscntrl.c ft_isgraph.c \
 		ft_islower.c ft_isspace.c ft_isupper.c ft_isxdigit.c ft_str_is_alpha.c \
 		ft_str_is_lowercase.c ft_str_is_numeric.c ft_str_is_printable.c \
 		ft_str_is_uppercase.c ft_strlowcase.c ft_strupcase.c \
 		ft_strcapitalize.c ft_strcasecmp.c ft_strncasecmp.c ft_strcasestr.c \
 		ft_strlcpy.c ft_strndup.c ft_putnbr_base.c ft_sqrt.c ft_abs.c \
-		ft_isprime.c
+		ft_isprime.c ft_realloc.c
 
 OBJ = $(SRCS:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 ############
 ## COLORS ##

@@ -6,7 +6,7 @@
 /*   By: manki <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/28 11:20:00 by manki             #+#    #+#             */
-/*   Updated: 2017/12/30 13:58:24 by manki            ###   ########.fr       */
+/*   Updated: 2018/01/12 14:13:54 by manki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,17 @@
 
 # include "./libft/libft.h"
 
-# define BUFF_SIZE 9
+# define BUFF_SIZE 8
 
-int		get_next_line(const int fd, char **line);
+typedef struct	s_gnl
+{
+
+	int			i;
+	int			r;
+	char		buf[BUFF_SIZE];
+	int			len;
+}				t_gnl;
+
+int				get_next_line(const int fd, char **line);
 
 #endif

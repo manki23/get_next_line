@@ -6,7 +6,7 @@
 /*   By: manki <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/28 11:19:49 by manki             #+#    #+#             */
-/*   Updated: 2018/01/12 14:48:44 by manki            ###   ########.fr       */
+/*   Updated: 2018/01/14 14:04:15 by manki            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,67 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-#include <stdio.h>
-
-int		ft_fill_line(char **line, t_gnl *f)
+int		ft_fill_line(char **line, t_gnl *s)
 {
-	while (f->i < f->r)
+	while (s->i < s->r)
 	{
-		f->len += 1;
-		if (!(*line = ft_realloc(*line, f->len + 1)))
+		s->len += 1;
+		if (!(*line = ft_realloc(*line, s->len + 1)))
 			return (-1);
-		if (f->buf[f->i] == '\n')
+		if (s->buf[s->i] == '\n')
 		{
-			f->i++;
-			f->len = 0;
+			s->i++;
+			s->len = 0;
 			return (1);
 		}
-		line[0][f->len - 1] = f->buf[f->i];
-		line[0][f->len] = '\0';
-		f->i++;
+		line[0][s->len - 1] = s->buf[s->i];
+		line[0][s->len] = '\0';
+		s->i++;
 	}
-	if (f->i == 0 && f->r == 0)
+	if (s->i == 0 && s->r == 0)
 		return (0);
 	return (2);
 }
 
+t_gnl	*ft_find_fd(const int fd, t_gnl tab[])
+{
+	int		i;
+
+	i = 0;
+	while (i < FD && tab[i].fd != fd)
+		i++;
+	if (i < FD && tab[i].fd == fd)
+		return (&tab[i]);
+	else
+	{
+		i = 0;
+		while (i < FD && tab[i].fd != 0)
+			i++;
+		tab[i].fd = fd;
+		return (&tab[i]);
+	}
+}
+
 int		get_next_line(const int fd, char **line)
 {
-	static t_gnl	f;
+	static t_gnl	tab[FD];
+	t_gnl			*s;
 	int				result;
 
-	if ((line == NULL) || (fd < 0))
+	if ((line == NULL) || (fd < 0) || (fd > FD) || !(*line = ft_strnew(0)))
 		return (-1);
-	*line = ft_strnew(0);
 	result = 3;
-	if ((f.i < f.r) && ((result = ft_fill_line(line, &f)) != 2))
+	s = ft_find_fd(fd, tab);
+	if ((s->i < s->r) && ((result = ft_fill_line(line, s)) != 2))
 		return (result);
 	while (result == 3 || result == 2)
 	{
-		f.i = 0;
-		if ((f.r = read(fd, f.buf, BUFF_SIZE)) == -1)
+		s->i = 0;
+		if ((s->r = read(s->fd, s->buf, BUFF_SIZE)) == -1)
 			return (-1);
-		if (f.r == 0 && result == 2)
+		if (s->r == 0 && result == 2)
 			return (1);
-		result = ft_fill_line(line, &f);
+		result = ft_fill_line(line, s);
 		if (result != 2)
 			return (result);
 	}
